@@ -1,6 +1,6 @@
 ﻿namespace Лабиринт
 {
-    partial class Form1
+    partial class login
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -33,8 +33,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.avtorizacia = new System.Windows.Forms.Button();
+            this.registracia = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -81,34 +81,35 @@
             this.textBox2.Size = new System.Drawing.Size(325, 20);
             this.textBox2.TabIndex = 4;
             // 
-            // button1
+            // avtorizacia
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(255, 230);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(130, 50);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Авторизация";
-            this.button1.UseVisualStyleBackColor = true;
+            this.avtorizacia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.avtorizacia.Location = new System.Drawing.Point(255, 230);
+            this.avtorizacia.Name = "avtorizacia";
+            this.avtorizacia.Size = new System.Drawing.Size(130, 50);
+            this.avtorizacia.TabIndex = 5;
+            this.avtorizacia.Text = "Авторизация";
+            this.avtorizacia.UseVisualStyleBackColor = true;
+            this.avtorizacia.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // registracia
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(255, 308);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(130, 50);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Регистрация";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.registracia.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.registracia.Location = new System.Drawing.Point(255, 308);
+            this.registracia.Name = "registracia";
+            this.registracia.Size = new System.Drawing.Size(130, 50);
+            this.registracia.TabIndex = 6;
+            this.registracia.Text = "Регистрация";
+            this.registracia.UseVisualStyleBackColor = true;
+            this.registracia.Click += new System.EventHandler(this.button2_Click);
             // 
-            // Form1
+            // login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.registracia);
+            this.Controls.Add(this.avtorizacia);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label3);
@@ -116,9 +117,10 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "login";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Авторизация";
+            this.Activated += new System.EventHandler(this.Form1_Activated);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,8 +133,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button avtorizacia;
+        private System.Windows.Forms.Button registracia;
     }
 }
 
