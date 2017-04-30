@@ -33,6 +33,8 @@
             this.vihod = new System.Windows.Forms.Button();
             this.generirovat = new System.Windows.Forms.Button();
             this.izmenit_parametry = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -67,7 +69,7 @@
             // 
             // generirovat
             // 
-            this.generirovat.Location = new System.Drawing.Point(150, 120);
+            this.generirovat.Location = new System.Drawing.Point(151, 153);
             this.generirovat.Name = "generirovat";
             this.generirovat.Size = new System.Drawing.Size(200, 80);
             this.generirovat.TabIndex = 3;
@@ -85,11 +87,34 @@
             this.izmenit_parametry.UseVisualStyleBackColor = true;
             this.izmenit_parametry.Click += new System.EventHandler(this.button4_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Лабиринт 1",
+            "Лабиринт 2",
+            "Лабиринт 3"});
+            this.comboBox1.Location = new System.Drawing.Point(164, 107);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(172, 21);
+            this.comboBox1.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(196, 78);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(110, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Выберите лабиринт:";
+            // 
             // Account
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 361);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.izmenit_parametry);
             this.Controls.Add(this.generirovat);
             this.Controls.Add(this.vihod);
@@ -97,7 +122,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Account";
-            this.Text = "Account";
+            this.Text = "Ваш аккаунт";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Account_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -111,5 +136,7 @@
         private System.Windows.Forms.Button vihod;
         private System.Windows.Forms.Button generirovat;
         private System.Windows.Forms.Button izmenit_parametry;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label2;
     }
 }
