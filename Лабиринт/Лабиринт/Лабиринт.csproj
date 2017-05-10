@@ -62,6 +62,8 @@
     <Compile Include="login.Designer.cs">
       <DependentUpon>login.cs</DependentUpon>
     </Compile>
+    <Compile Include="MazeGenerator.cs" />
+    <Compile Include="MazeSolver.cs" />
     <Compile Include="options.cs">
       <SubType>Form</SubType>
     </Compile>
