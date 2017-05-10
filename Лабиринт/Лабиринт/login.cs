@@ -11,9 +11,17 @@ namespace Лабиринт
 {
     public partial class login : Form
     {
+
+        Account account;
         public login()
         {
             InitializeComponent();
+        }
+
+        public login(Account account)
+        {
+            InitializeComponent();
+            this.account = account;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -30,9 +38,13 @@ namespace Лабиринт
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Visible = false;
-            Account account = new Account(this);
-            account.ShowDialog();
+            account.Visible = true;
+            this.Close();
+        }
+
+        private void login_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

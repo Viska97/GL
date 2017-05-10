@@ -121,9 +121,12 @@
             this.Controls.Add(this.smenit_accaunt);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Account";
-            this.Text = "Ваш аккаунт";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Генератор лабиринта";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Account_FormClosed);
+            this.Load += new System.EventHandler(this.Account_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
