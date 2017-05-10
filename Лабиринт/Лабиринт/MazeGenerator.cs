@@ -8,6 +8,7 @@ namespace Лабиринт
     class MazeGenerator
     {
         private int w, h, wn, hn;
+        private bool manypartion;
 
         [Flags]
         public enum Directions
@@ -170,10 +171,11 @@ namespace Лабиринт
             }
         }
 
-        public MazeGenerator(int w, int h)
+        public MazeGenerator(int w, int h, bool manypartion)
         {
             this.w = w;
             this.h = h;
+            this.manypartion = manypartion;
             wn = (w - 1) / 2;
             hn = (h - 1) / 2;
         }
@@ -209,16 +211,28 @@ namespace Лабиринт
                     if (directions.HasFlag(Directions.S))
                     {
                         maze2.Add(0);
+                        if (!manypartion)
+                        {
+                            maze2.Add(0);
+                        }
                         //maze2.Add(0);
                     }
                     else
                     {
                         maze2.Add(1);
+                        if (!manypartion)
+                        {
+                            maze2.Add(1);
+                        }
+                        
                         //maze2.Add(1);
                     }
 
-
-                    maze2.Add(1);
+                    if (manypartion)
+                    {
+                        maze2.Add(1);
+                    }
+                    
 
                 }
                 for (int j = 0; j < h; j++)

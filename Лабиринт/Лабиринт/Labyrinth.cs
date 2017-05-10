@@ -34,7 +34,7 @@ namespace Лабиринт
 
         private void Labyrinth_Load(object sender, EventArgs e)
         {
-            mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions);
+            mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions, manypartion);
             int[,] mzmatrix = mz.Gener();
             m_Maze = new MazeSolver(mzmatrix);
             pictureBox1.Size = new System.Drawing.Size(m_iColDimensions * m_iSize + 3, m_iRowDimensions * m_iSize + 3);
@@ -63,7 +63,7 @@ namespace Лабиринт
 
         private void button2_Click(object sender, EventArgs e)
         {
-            mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions);
+            mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions, manypartion);
             int[,] mzmatrix = mz.Gener();
             m_Maze = new MazeSolver(mzmatrix);
             m_iMaze = m_Maze.GetMaze;
