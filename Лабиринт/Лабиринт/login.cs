@@ -13,6 +13,7 @@ namespace Лабиринт
     {
 
         Account account;
+        bool access = false;
         public login()
         {
             InitializeComponent();
@@ -38,13 +39,17 @@ namespace Лабиринт
 
         private void button1_Click(object sender, EventArgs e)
         {
+            access = true;
             account.Visible = true;
             this.Close();
         }
 
         private void login_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Application.Exit();
+            if (!access)
+            {
+                Application.Exit();
+            }
         }
     }
 }
