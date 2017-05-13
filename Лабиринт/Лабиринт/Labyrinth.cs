@@ -16,6 +16,7 @@ namespace Лабиринт
         MazeSolver m_Maze;
         MazeGenerator mz;
         Account account;
+        Maze mz2;
         int[,] m_iMaze;
         int m_iSize = 10;
         int m_iRowDimensions = 0; //16
@@ -23,7 +24,10 @@ namespace Лабиринт
         int height = 0;
         int width = 0;
         int method = 0;
-        int iSelectedX, iSelectedY;
+        int startY;
+        int endY, endX;
+        int StudentCount = 1;
+        public readonly string Imya, Familiya, Otchestvo;
 
         public Labyrinth()
         {
@@ -37,7 +41,7 @@ namespace Лабиринт
 
         private void Labyrinth_Load(object sender, EventArgs e)
         {
-            Maze mz2 = new Maze(100, 100);
+            mz2 = new Maze(100, 100);
             mz2.Generate(height, width,method);
             int[,] mzmatrix2 = mz2.Getmaze(false);
             //mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions, manypartion);
@@ -46,6 +50,8 @@ namespace Лабиринт
             pictureBox1.Size = new System.Drawing.Size(m_iColDimensions * m_iSize + 3, m_iRowDimensions * m_iSize + 3);
             pictureBox1.Location = new Point((660-(m_iColDimensions * m_iSize + 3))/2, ((538-(m_iRowDimensions * m_iSize + 3))/2)+5);
             m_iMaze = m_Maze.GetMaze;
+            CheckStartAndEnd();
+
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -63,7 +69,12 @@ namespace Лабиринт
                     if (m_iMaze[i, j] == 100)
                         myGraphics.FillRectangle(new SolidBrush(Color.Cyan), j * m_iSize + 1, i * m_iSize + 1, m_iSize - 1, m_iSize - 1);
                     if (m_iMaze[i, j] == 2)
+                    
                         myGraphics.FillRectangle(new SolidBrush(Color.Green), j * m_iSize + 1, i * m_iSize + 1, m_iSize - 1, m_iSize - 1);
+                        
+                    
+                        
+
                     if (m_iMaze[i, j] == 3)
                         myGraphics.FillRectangle(new SolidBrush(Color.Green), j * m_iSize + 1, i * m_iSize + 1, m_iSize - 1, m_iSize - 1);
                     if (m_iMaze[i, j] == 4)
@@ -77,7 +88,7 @@ namespace Лабиринт
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Maze mz2 = new Maze(100, 100);
+            mz2 = new Maze(100, 100);
             mz2.Generate(height, width, method);
             int[,] mzmatrix2 = mz2.Getmaze(false);
             //mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions, manypartion);
@@ -85,6 +96,7 @@ namespace Лабиринт
             m_Maze = new MazeSolver(mzmatrix2);
             m_iMaze = m_Maze.GetMaze;
             this.Refresh();
+            CheckStartAndEnd();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -100,31 +112,53 @@ namespace Лабиринт
                     {
                         m_iMaze[iY, iX] = 2;
                         m_iMaze[iY, iX + 1] = 3;
+                        StudentCount++;
+
                     }
                     else if (m_iMaze[iY, iX - 1] == 2)
                     {
                         m_iMaze[iY, iX] = 2;
                         m_iMaze[iY, iX - 1] = 3;
+                        StudentCount++;
                     }
                     else if (m_iMaze[iY + 1, iX] == 2)
                     {
                         m_iMaze[iY, iX] = 2;
                         m_iMaze[iY + 1, iX] = 3;
+                        StudentCount++;
                     }
                     else if (m_iMaze[iY - 1, iX] == 2)
                     {
                         m_iMaze[iY, iX] = 2;
                         m_iMaze[iY - 1, iX] = 3;
+                        StudentCount++;
                     }
                 }
                 if (m_iMaze[iY, iX] == 5)
                 {
-                    m_iMaze[iY, iX] = 2;
-                    pictureBox1.Refresh();
-                    this.Visible = false;
-                    results results = new results(this, m_iMaze,m_iRowDimensions,m_iColDimensions,m_iSize);
-                    results.ShowDialog();
-                    this.Close();
+                    bool checkexitpath = false;
+                    if (m_iMaze[iY, iX - 1] == 2)
+                    {
+                        checkexitpath = true;
+                    }
+                    else if (m_iMaze[iY + 1, iX] == 2)
+                    {
+                        checkexitpath = true;
+                    }
+                    else if (m_iMaze[iY - 1, iX] == 2)
+                    {
+                        checkexitpath = true;
+                    }
+
+                    if (checkexitpath)
+                    {
+                        m_iMaze[iY, iX] = 2;
+                        pictureBox1.Refresh();
+                        StudentCount++;
+                        LoadResults(true);
+                        this.Close();
+                    }
+                    
                 }
             }
             if (e.Button == MouseButtons.Right)
@@ -135,18 +169,22 @@ namespace Лабиринт
                     if (m_iMaze[iY, iX + 1] == 3)
                     {
                         m_iMaze[iY, iX + 1] = 2;
+                        StudentCount++;
                     }
                     else if (m_iMaze[iY, iX - 1] == 3)
                     {
                         m_iMaze[iY, iX - 1] = 2;
+                        StudentCount++;
                     }
                     else if (m_iMaze[iY + 1, iX] == 3)
                     {
                         m_iMaze[iY + 1, iX] = 2;
+                        StudentCount++;
                     }
                     else if (m_iMaze[iY - 1, iX] == 3)
                     {
                         m_iMaze[iY - 1, iX] = 2;
+                        StudentCount++;
                     }
                 }
             }
@@ -159,7 +197,7 @@ namespace Лабиринт
             
         }
 
-        public Labyrinth(Account account, int size ,int method ,bool manypartion, int time)
+        public Labyrinth(Account account, int size ,int method ,bool manypartion, int time, string Familiya, string Imya, string Otchestvo)
         {
             this.account = account;
             this.time = time;
@@ -169,8 +207,53 @@ namespace Лабиринт
             this.height = (size - 1) / 2;
             this.width = (size - 1) / 2;
             this.method = method;
+            this.Imya = Imya;
+            this.Familiya = Familiya;
+            this.Otchestvo = Otchestvo;
             m_iSize = (int) 510/size;
             InitializeComponent();
+        }
+
+        private void CheckStartAndEnd()
+        {
+            for (int i = 0; i < m_iRowDimensions; i++)
+            {
+                for (int j = 0; j < m_iColDimensions; j++)
+                {
+                    if (m_iMaze[i, j] == 2)
+                        startY = i;
+                    if (m_iMaze[i, j] == 5)
+                    {
+                        endY = i;
+                        endX = j;
+                    }
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadResults(false);
+            this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            LoadResults(false);
+        }
+
+        private void LoadResults(bool ExitFind)
+        {
+            this.Visible = false;
+            int[,] OptimalMaze = mz2.Getmaze(true);
+            int[,] testmat = OptimalMaze;
+            results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind);
+            results.ShowDialog();
         }
     }
 }

@@ -142,7 +142,7 @@ namespace Лабиринт
                 {
                     if (check)
                     {
-                        maze1.Add(100);
+                        maze1.Add(0);
                     }
                     else
                     {
@@ -162,7 +162,7 @@ namespace Лабиринт
                         {
                             if (check)
                             {
-                                maze1.Add(1);
+                                maze1.Add(0);
                             }
                             else
                             {

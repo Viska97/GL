@@ -47,7 +47,7 @@ namespace Лабиринт
         private void button3_Click(object sender, EventArgs e)
         {
             this.Visible = false;
-            Labyrinth labyrinth = new Labyrinth(this, 31, 0, true, 20);
+            Labyrinth labyrinth = new Labyrinth(this, 15, 0, true, 20, "Иванов", "Иван", "Иванович");
             labyrinth.ShowDialog();
         }
 
