@@ -11,16 +11,14 @@ namespace Лабиринт
 {
     public partial class Labyrinth : Form
     {
-        int time;
         bool manypartion;
         MazeSolver m_Maze;
-        MazeGenerator mz;
         Account account;
-        Maze mz2;
+        Maze mz;
         int[,] m_iMaze;
         int m_iSize = 10;
-        int m_iRowDimensions = 0; //16
-        int m_iColDimensions = 0; //20
+        int m_iRowDimensions = 0; 
+        int m_iColDimensions = 0; 
         int height = 0;
         int width = 0;
         int method = 0;
@@ -28,6 +26,11 @@ namespace Лабиринт
         int endY, endX;
         int StudentCount = 1;
         public readonly string Imya, Familiya, Otchestvo;
+        public int minutes, seconds;
+        int defminutes, defseconds;
+        bool NoFinish = true;
+        bool IsTeacher;
+        public bool GiveUp=false;
 
         public Labyrinth()
         {
@@ -41,17 +44,22 @@ namespace Лабиринт
 
         private void Labyrinth_Load(object sender, EventArgs e)
         {
-            mz2 = new Maze(100, 100);
-            mz2.Generate(height, width,method);
-            int[,] mzmatrix2 = mz2.Getmaze(false);
-            //mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions, manypartion);
-            //int[,] mzmatrix = mz.Gener();
+            if (IsTeacher)
+            {
+                button2.Enabled = true;
+                button3.Enabled = true;
+                button4.Enabled = true;
+            }
+            mz = new Maze(100, 100);
+            mz.Generate(height, width,method);
+            int[,] mzmatrix2 = mz.Getmaze(false);
             m_Maze = new MazeSolver(mzmatrix2);
             pictureBox1.Size = new System.Drawing.Size(m_iColDimensions * m_iSize + 3, m_iRowDimensions * m_iSize + 3);
             pictureBox1.Location = new Point((660-(m_iColDimensions * m_iSize + 3))/2, ((538-(m_iRowDimensions * m_iSize + 3))/2)+5);
             m_iMaze = m_Maze.GetMaze;
             CheckStartAndEnd();
-
+            UpdateTimerText();
+            timer1.Start();
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
@@ -82,21 +90,23 @@ namespace Лабиринт
                     if (m_iMaze[i, j] == 5)
                         myGraphics.FillRectangle(new SolidBrush(Color.Blue), j * m_iSize + 1, i * m_iSize + 1, m_iSize - 1, m_iSize - 1);
                 }
-            //print ball
-            //myGraphics.FillEllipse(new SolidBrush(Color.DarkCyan), this.iSelectedX * m_iSize + 5, this.iSelectedY * m_iSize + 5, m_iSize - 10, m_iSize - 10);
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            mz2 = new Maze(100, 100);
-            mz2.Generate(height, width, method);
-            int[,] mzmatrix2 = mz2.Getmaze(false);
-            //mz = new MazeGenerator(m_iColDimensions, m_iRowDimensions, manypartion);
-            //int[,] mzmatrix = mz.Gener();
+            timer1.Stop();
+            minutes = defminutes;
+            seconds = defseconds;
+            mz = new Maze(100, 100);
+            mz.Generate(height, width, method);
+            int[,] mzmatrix2 = mz.Getmaze(false);
             m_Maze = new MazeSolver(mzmatrix2);
             m_iMaze = m_Maze.GetMaze;
             this.Refresh();
             CheckStartAndEnd();
+            UpdateTimerText();
+            timer1.Start();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -155,6 +165,8 @@ namespace Лабиринт
                         m_iMaze[iY, iX] = 2;
                         pictureBox1.Refresh();
                         StudentCount++;
+                        NoFinish = false;
+                        timer1.Stop();
                         LoadResults(true);
                         this.Close();
                     }
@@ -163,7 +175,7 @@ namespace Лабиринт
             }
             if (e.Button == MouseButtons.Right)
             {
-                if ((m_iMaze[iY, iX] == 3 || m_iMaze[iY, iX] == 2) && (iX > 0))
+                if ((m_iMaze[iY, iX] == 2) && (iX > 0))
                 {
                     m_iMaze[iY, iX] = 4;
                     if (m_iMaze[iY, iX + 1] == 3)
@@ -197,10 +209,9 @@ namespace Лабиринт
             
         }
 
-        public Labyrinth(Account account, int size ,int method ,bool manypartion, int time, string Familiya, string Imya, string Otchestvo)
+        public Labyrinth(Account account, int size ,int method ,bool manypartion, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher)
         {
             this.account = account;
-            this.time = time;
             this.manypartion = manypartion;
             m_iRowDimensions = size;
             m_iColDimensions = size;
@@ -210,6 +221,11 @@ namespace Лабиринт
             this.Imya = Imya;
             this.Familiya = Familiya;
             this.Otchestvo = Otchestvo;
+            this.minutes = minutes;
+            this.seconds = seconds;
+            this.defminutes = minutes;
+            this.defseconds = seconds;
+            this.IsTeacher = IsTeacher;
             m_iSize = (int) 510/size;
             InitializeComponent();
         }
@@ -231,10 +247,39 @@ namespace Лабиринт
             }
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            seconds = seconds - 1;
+            if (seconds == -1)
+            {
+                minutes = minutes - 1;
+                seconds = 59;
+            }
+            if (minutes == 0 && seconds == 0 && NoFinish)
+            {
+                timer1.Stop();
+                UpdateTimerText();
+                MessageBox.Show("Время вышло!","", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                LoadResults(false);
+                this.Close();
+            }
+            UpdateTimerText();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            LoadResults(false);
-            this.Close();
+            DialogResult result = MessageBox.Show(
+                "Лабиринт не пройден! Вы действительно хотите сдаться?",
+                "",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Exclamation);
+            if (result == DialogResult.Yes)
+            {
+                timer1.Stop();
+                GiveUp = true;
+                LoadResults(false);
+                this.Close();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -244,16 +289,40 @@ namespace Лабиринт
 
         private void button4_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
             LoadResults(false);
+            timer1.Start();
         }
 
         private void LoadResults(bool ExitFind)
         {
             this.Visible = false;
-            int[,] OptimalMaze = mz2.Getmaze(true);
+            int[,] OptimalMaze = mz.Getmaze(true);
             int[,] testmat = OptimalMaze;
             results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind);
             results.ShowDialog();
+        }
+
+        private void UpdateTimerText()
+        {
+            string min, sec;
+            if (seconds < 10)
+            {
+                sec = "0" + Convert.ToString(seconds);
+            }
+            else
+            {
+                sec = Convert.ToString(seconds);
+            }
+            if (minutes < 10)
+            {
+                min = "0" + Convert.ToString(minutes);
+            }
+            else
+            {
+                min = Convert.ToString(minutes);
+            }
+            label2.Text = "Осталось: " + min + ":" + sec;
         }
     }
 }

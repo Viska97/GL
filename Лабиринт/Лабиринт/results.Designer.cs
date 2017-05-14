@@ -83,9 +83,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.Location = new System.Drawing.Point(15, 66);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(106, 20);
+            this.label3.Size = new System.Drawing.Size(200, 20);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Время: 12:34";
+            this.label3.Text = "Осталось времени: 12:34";
             // 
             // groupBox1
             // 

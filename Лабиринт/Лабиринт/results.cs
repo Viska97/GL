@@ -126,6 +126,7 @@ namespace Лабиринт
             }
             label6.Text = Result;
             label2.Text = labyrinth.Familiya + " " + labyrinth.Imya + " " + labyrinth.Otchestvo;
+            UpdateTimerText();
         }
 
         private void pictureBox2_Paint(object sender, PaintEventArgs e)
@@ -143,6 +144,28 @@ namespace Лабиринт
                     if (m_iMaze[i, j] == 100)
                         myGraphics.FillRectangle(new SolidBrush(Color.Cyan), j * m_iSize + 1, i * m_iSize + 1, m_iSize - 1, m_iSize - 1);
                 }
+        }
+
+        private void UpdateTimerText()
+        {
+            string min, sec;
+            if (labyrinth.seconds < 10)
+            {
+                sec = "0" + Convert.ToString(labyrinth.seconds);
+            }
+            else
+            {
+                sec = Convert.ToString(labyrinth.seconds);
+            }
+            if (labyrinth.minutes < 10)
+            {
+                min = "0" + Convert.ToString(labyrinth.minutes);
+            }
+            else
+            {
+                min = Convert.ToString(labyrinth.minutes);
+            }
+            label3.Text = "Осталось времени: " + min + ":" + sec;
         }
     }
 }
