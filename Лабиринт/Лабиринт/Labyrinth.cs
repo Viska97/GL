@@ -11,7 +11,8 @@ namespace Лабиринт
 {
     public partial class Labyrinth : Form
     {
-        bool manypartion;
+        int style;
+        public string labname;
         MazeSolver m_Maze;
         Account account;
         Maze mz;
@@ -50,9 +51,10 @@ namespace Лабиринт
                 button3.Enabled = true;
                 button4.Enabled = true;
             }
+            groupBox1.Text = labname;
             mz = new Maze(100, 100);
             mz.Generate(height, width,method);
-            int[,] mzmatrix2 = mz.Getmaze(false);
+            int[,] mzmatrix2 = mz.Getmaze(style, false);
             m_Maze = new MazeSolver(mzmatrix2);
             pictureBox1.Size = new System.Drawing.Size(m_iColDimensions * m_iSize + 3, m_iRowDimensions * m_iSize + 3);
             pictureBox1.Location = new Point((660-(m_iColDimensions * m_iSize + 3))/2, ((538-(m_iRowDimensions * m_iSize + 3))/2)+5);
@@ -100,7 +102,7 @@ namespace Лабиринт
             seconds = defseconds;
             mz = new Maze(100, 100);
             mz.Generate(height, width, method);
-            int[,] mzmatrix2 = mz.Getmaze(false);
+            int[,] mzmatrix2 = mz.Getmaze(style, false);
             m_Maze = new MazeSolver(mzmatrix2);
             m_iMaze = m_Maze.GetMaze;
             this.Refresh();
@@ -209,10 +211,10 @@ namespace Лабиринт
             
         }
 
-        public Labyrinth(Account account, int size ,int method ,bool manypartion, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher)
+        public Labyrinth(Account account, int size ,int method ,int style, string labname, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher)
         {
             this.account = account;
-            this.manypartion = manypartion;
+            this.style = style;
             m_iRowDimensions = size;
             m_iColDimensions = size;
             this.height = (size - 1) / 2;
@@ -226,6 +228,7 @@ namespace Лабиринт
             this.defminutes = minutes;
             this.defseconds = seconds;
             this.IsTeacher = IsTeacher;
+            this.labname = labname;
             m_iSize = (int) 510/size;
             InitializeComponent();
         }
@@ -297,7 +300,7 @@ namespace Лабиринт
         private void LoadResults(bool ExitFind)
         {
             this.Visible = false;
-            int[,] OptimalMaze = mz.Getmaze(true);
+            int[,] OptimalMaze = mz.Getmaze(style, true);
             int[,] testmat = OptimalMaze;
             results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind);
             results.ShowDialog();
