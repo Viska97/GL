@@ -155,6 +155,7 @@
             this.zaregistrirovtsy.TabIndex = 11;
             this.zaregistrirovtsy.Text = "Зарегистрироваться";
             this.zaregistrirovtsy.UseVisualStyleBackColor = true;
+            this.zaregistrirovtsy.Click += new System.EventHandler(this.zaregistrirovtsy_Click);
             // 
             // label6
             // 
