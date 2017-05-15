@@ -123,7 +123,7 @@ namespace Лабиринт
         private Random random = new Random();
 
 
-        public int[,] Getmaze(bool check)
+        public int[,] Getmaze(int style, bool check)
         {
             List<int> mazeout = new List<int>();
             for (int i = 0; i < ((height*2)+1); i++)
@@ -173,25 +173,57 @@ namespace Лабиринт
                         else
                         {
                             maze1.Add(0);
+                            
                         }
                         
                     }
                     else
                     {
                         maze1.Add(1);
+                        
                     }
                     if (!this.maze[i, j].DownWall)
                     {
                         maze2.Add(0);
+                        if (style == 1)
+                        {
+                            if ((j != (width - 1)))
+                            {
+                                maze2.Add(0);
+                            }
+                            else
+                            {
+                                maze2.Add(1);
+                            }
+                        }
+                        
                     }
                     else
                     {
                         maze2.Add(1);
+                        if (style == 1)
+                        {
+                            maze2.Add(1);
+                        }
+                        
                     }
 
+                    if (style == 0)
+                    {
+                        maze2.Add(1);
+                    }
 
-                    maze2.Add(1);
-
+                    if (style == 2)
+                    {
+                        if (!this.maze[i, j].RightWall && (j != (width - 1)) && (i != (height - 1)))
+                        {
+                            maze2.Add(0);
+                        }
+                        else
+                        {
+                            maze2.Add(1);
+                        }
+                    }
 
 
                 }
