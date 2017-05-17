@@ -73,6 +73,14 @@ namespace Лабиринт
             imya = credentials[1];
             otchestvo = credentials[2];
             label1.Text = familiya + " " + imya.Substring(0, 1) + "." + otchestvo.Substring(0, 1) + ".";
+            if (isteacher)
+            {
+                izmenit_parametry.Enabled = true;
+            }
+            else
+            {
+                izmenit_parametry.Enabled = false;
+            }
         }
         
     }
