@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.Common;
 using System.Data.SQLite;
+using static Лабиринт.SQLHelper;
 
 namespace Лабиринт
 {
@@ -41,9 +42,31 @@ namespace Лабиринт
 
         private void button1_Click(object sender, EventArgs e)
         {
-            access = true;
-            account.Visible = true;
-            this.Close();
+            string login = Convert.ToString(textBox1.Text);
+            string password = Convert.ToString(textBox2.Text);
+            int resultcode = Authorize(login, password);
+            switch (resultcode)
+            {
+                case 1:
+                    MessageBox.Show("К сожалению, такого логина не существует! Пожалуйста, проверьте поле логина.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    break;
+                case 2:
+                    MessageBox.Show("К сожалению, пароль неверен! Пожалуйста, проверьте поле пароля.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    break;
+                case 10:
+                    access = true;
+                    account.UpdateUserInfo(resultcode, true);
+                    account.Visible = true;
+                    this.Close();
+                    break;
+                default:
+                    access = true;
+                    account.UpdateUserInfo(resultcode,false);
+                    account.Visible = true;
+                    this.Close();
+                    break;
+            }
+            
         }
 
         private void login_FormClosed(object sender, FormClosedEventArgs e)

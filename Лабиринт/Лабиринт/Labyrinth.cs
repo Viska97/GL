@@ -287,6 +287,7 @@ namespace Лабиринт
 
         private void button3_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
             this.Close();
         }
 
