@@ -110,6 +110,7 @@
     <Compile Include="results.Designer.cs">
       <DependentUpon>results.cs</DependentUpon>
     </Compile>
+    <Compile Include="SQLHelper.cs" />
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
     </EmbeddedResource>
