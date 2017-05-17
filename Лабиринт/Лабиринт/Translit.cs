@@ -7,10 +7,11 @@ namespace Лабиринт
 {
     class Translit
     {
-        private static Dictionary<string, string> transliter = new Dictionary<string, string>();
+        private static Dictionary<string, string> transliter;
 
         public Translit()
         {
+            transliter = new Dictionary<string, string>();
             transliter.Add("а", "a");
             transliter.Add("б", "b");
             transliter.Add("в", "v");

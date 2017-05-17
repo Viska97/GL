@@ -35,6 +35,9 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.avtorizacia = new System.Windows.Forms.Button();
             this.registracia = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -80,6 +83,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(325, 20);
             this.textBox2.TabIndex = 4;
+            this.textBox2.UseSystemPasswordChar = true;
             // 
             // avtorizacia
             // 
@@ -103,11 +107,49 @@
             this.registracia.UseVisualStyleBackColor = true;
             this.registracia.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.Color.Red;
+            this.label4.Location = new System.Drawing.Point(100, 160);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(485, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Логин не должен быть пустым или содержать любые символы кроме латинских букв и ци" +
+    "фр!";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.Red;
+            this.label5.Location = new System.Drawing.Point(100, 202);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(492, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Пароль не должен быть пустым или содержать любые символы кроме латинских букв и ц" +
+    "ифр!";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(523, 182);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(64, 17);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "Скрыть";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 441);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.registracia);
             this.Controls.Add(this.avtorizacia);
             this.Controls.Add(this.textBox2);
@@ -122,6 +164,7 @@
             this.Text = "Авторизация";
             this.Activated += new System.EventHandler(this.Form1_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.login_FormClosed);
+            this.Load += new System.EventHandler(this.login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -136,6 +179,9 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button avtorizacia;
         private System.Windows.Forms.Button registracia;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

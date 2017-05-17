@@ -44,34 +44,64 @@ namespace Лабиринт
         private void button1_Click(object sender, EventArgs e)
         {
             this.Visible = false;
-            login login = new login(this);
+            bool firstrun = CheckTeacherRegistration();
+            login login = new login(this, !firstrun);
             login.ShowDialog();
             this.Refresh();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            string[] parameters = GetProfileParameters(comboBox1.SelectedIndex);
             this.Visible = false;
-            Labyrinth labyrinth = new Labyrinth(this, 15, 0, 0, "Лабиринт 1", 0, 20 , familiya, imya, otchestvo, isteacher);
+            Labyrinth labyrinth = new Labyrinth(this, Convert.ToInt32(parameters[3]), Convert.ToInt32(parameters[1]), Convert.ToInt32(parameters[2]), parameters[0], Convert.ToInt32(parameters[4]), Convert.ToInt32(parameters[5]), familiya, imya, otchestvo, isteacher);
             labyrinth.ShowDialog();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Account_Enter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Account_VisibleChanged(object sender, EventArgs e)
+        {
+            
         }
 
         private void Account_Load(object sender, EventArgs e)
         {
             CheckDatabase();
+            List<string> presetsnames = GetProfilesNames();
+            foreach (string presetname in presetsnames)
+            {
+                comboBox1.Items.Add(presetname);
+            }
+            bool firstrun = CheckTeacherRegistration();
             this.Visible = false;
-            login login = new login(this);
+            login login = new login(this, !firstrun);
             login.ShowDialog();
         }
 
-        public void UpdateUserInfo(int id, bool isteacher)
+        public void UpdateUserInfo(int id)
         {
             this.id = id;
-            this.isteacher = isteacher;
             string[] credentials = GetCredentials(id);
             familiya = credentials[0];
             imya = credentials[1];
             otchestvo = credentials[2];
+            if (credentials[3] == "True")
+            {
+                isteacher = true;
+            }
+            else
+            {
+                isteacher = false;
+            }
             label1.Text = familiya + " " + imya.Substring(0, 1) + "." + otchestvo.Substring(0, 1) + ".";
             if (isteacher)
             {
@@ -81,6 +111,7 @@ namespace Лабиринт
             {
                 izmenit_parametry.Enabled = false;
             }
+            comboBox1.SelectedIndex = 0;
         }
         
     }

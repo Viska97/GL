@@ -5,12 +5,14 @@ using System.Text;
 using System.Data.SQLite;
 using System.IO;
 using System.Data.Common;
+using System.Windows.Forms;
 
 namespace Лабиринт
 {
     public static class SQLHelper
     {
         static string databaseName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "gl.db");
+        static string deleteName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "deleteme.txt");
         static string pass = "kW82OT9uM5";
         static SQLiteConnection connection;
         static SQLiteDataReader reader;
@@ -30,6 +32,16 @@ namespace Лабиринт
                 command = new SQLiteCommand("CREATE TABLE Results (id INTEGER, datetime DATETIME, lname TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, optimalcount INTEGER, studentcount INTEGER, time TIME, result TEXT);", connection);
                 command.ExecuteNonQuery();
                 command = new SQLiteCommand("CREATE TABLE Presets (presetid INTEGER, lname TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, minutes INTEGER, seconds INTEGER);", connection);
+                command.ExecuteNonQuery();
+                command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (0, 'Лабиринт 1', 0, 0, 21, 1, 0);", connection);
+                command.ExecuteNonQuery();
+                command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (1, 'Лабиринт 2', 0, 0, 21, 1, 0);", connection);
+                command.ExecuteNonQuery();
+                command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (2, 'Лабиринт 3', 0, 0, 21, 1, 0);", connection);
+                command.ExecuteNonQuery();
+                command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (3, 'Лабиринт 4', 0, 0, 21, 1, 0);", connection);
+                command.ExecuteNonQuery();
+                command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (4, 'Лабиринт 5', 0, 0, 21, 1, 0);", connection);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -104,7 +116,7 @@ namespace Лабиринт
 
         public static string[] GetCredentials(int id)
         {
-            string[] credentials = new string[3];
+            string[] credentials = new string[4];
             connection.Open();
             SQLiteCommand command = new SQLiteCommand(string.Format("SELECT * FROM Accounts WHERE id='{0}' LIMIT 1", id), connection);
             reader = command.ExecuteReader();
@@ -113,9 +125,57 @@ namespace Лабиринт
                 credentials[0] = record["familiya"].ToString();
                 credentials[1] = record["imya"].ToString();
                 credentials[2] = record["otchestvo"].ToString();
+                credentials[3] = record["isteacher"].ToString();
             }
             connection.Close();
             return credentials;
+        }
+
+        public static List<string> GetProfilesNames()
+        {
+            List<string> presetsnames = new List<string>();
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM Presets ORDER BY presetid", connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                presetsnames.Add(record["lname"].ToString());
+            }
+            connection.Close();
+            return presetsnames;
+        }
+
+        public static string[] GetProfileParameters(int presetid)
+        {
+            string[] parameters = new string[6];
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(string.Format("SELECT * FROM Presets WHERE presetid='{0}' LIMIT 1", presetid), connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                parameters[0] = record["lname"].ToString();
+                parameters[1] = record["lgentype"].ToString();
+                parameters[2] = record["lstyle"].ToString();
+                parameters[3] = record["lsize"].ToString();
+                parameters[4] = record["minutes"].ToString();
+                parameters[5] = record["seconds"].ToString();
+            }
+            connection.Close();
+            return parameters;
+        }
+
+        public static void SetProfileParameters(int presetid, string lgentype, string lstyle, string lsize, string minutes, string seconds)
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(string.Format("UPDATE Presets SET lgentype = '{0}', lstyle = '{1}', lsize = '{2}', minutes = '{3}', seconds = '{4}' WHERE presetid='{5}'", lgentype, lstyle, lsize, minutes, seconds, presetid), connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public static void ResetDatabase()
+        {
+            File.Create(deleteName);
+            Application.Restart();
         }
 
     }
