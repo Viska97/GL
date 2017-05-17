@@ -57,37 +57,22 @@ namespace Лабиринт
             return flag;  
         }
 
-        public static bool AddAccount(string login, string password, string imya, string familiya, string otchestvo, int isteacher)
+        public static string AddAccount(string loginfamiliya, string password, string imya, string familiya, string otchestvo, int isteacher)
         {
             int maxid=10;
             connection.Open();
             SQLiteCommand command = new SQLiteCommand("SELECT * FROM Accounts ORDER BY id DESC LIMIT 1", connection);
-            try
-            {
-                reader = command.ExecuteReader();
-            }
-            catch (Exception)
-            {
-                connection.Close();
-                return false;
-            }
+            reader = command.ExecuteReader();
             foreach (DbDataRecord record in reader)
             {
                 maxid = Convert.ToInt32(record["id"].ToString());
                 maxid++;
             }
+            string login = loginfamiliya + Convert.ToString(maxid);
             command = new SQLiteCommand(string.Format("INSERT INTO 'Accounts' ('id', 'login', 'password', 'familiya', 'imya', 'otchestvo', 'isteacher') VALUES ({0}, '{1}', '{2}', '{3}', '{4}', '{5}', {6});", maxid, login, password, imya, familiya,otchestvo,isteacher), connection);
-            try
-            {
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                connection.Close();
-                return false;
-            }
+            command.ExecuteNonQuery();
             connection.Close();
-            return true;
+            return login;
         }
 
         public static int Authorize(string login, string password)

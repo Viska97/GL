@@ -111,6 +111,7 @@
       <DependentUpon>results.cs</DependentUpon>
     </Compile>
     <Compile Include="SQLHelper.cs" />
+    <Compile Include="Translit.cs" />
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
     </EmbeddedResource>

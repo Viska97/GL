@@ -11,9 +11,11 @@ using static Лабиринт.SQLHelper;
 
 namespace Лабиринт
 {
+
     public partial class RegistrationForm : Form
     {
-               login login;
+        Translit translit;
+        login login;
         public RegistrationForm()
         {
             InitializeComponent();
@@ -46,18 +48,30 @@ namespace Лабиринт
 
         private void zaregistrirovtsy_Click(object sender, EventArgs e)
         {
+            string login = "";
+            bool check=false;
             int isteacher=0;
             string familiya = Convert.ToString(textBox1.Text);
             string imya = Convert.ToString(textBox2.Text);
             string otchestvo = Convert.ToString(textBox3.Text);
             string password = Convert.ToString(textBox4.Text);
-            string login = Convert.ToString(textBox1.Text) + Convert.ToString(textBox2.Text);
+            translit = new Translit();
+            string loginfamiliya = translit.GetTranslit(Convert.ToString(textBox1.Text));
+            //string login = Convert.ToString(textBox1.Text) + Convert.ToString(textBox2.Text);
             if (radioButton1.Checked)
                 { isteacher = 1; }
-            bool check = AddAccount(login, password, familiya, imya, otchestvo, isteacher);
+            try
+            {
+                login = AddAccount(loginfamiliya, password, familiya, imya, otchestvo, isteacher);
+                check = true;
+            }
+            catch (Exception)
+            {
+                check = false;
+            }
             if (check)
             {
-                MessageBox.Show("Регистрация успешна!", "", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show(string.Format("Регистрация успешна! Ваш логин: {0}", login), "", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 this.Close();
             }
             else
