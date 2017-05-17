@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Data.Common;
 using System.Data.SQLite;
 using static Лабиринт.SQLHelper;
+using System.Text.RegularExpressions;
 
 namespace Лабиринт
 {
@@ -17,15 +18,19 @@ namespace Лабиринт
 
         Account account;
         bool access = false;
+        bool firstrun = false;
         public login()
         {
             InitializeComponent();
         }
 
-        public login(Account account)
+        
+
+        public login(Account account, bool firstrun)
         {
             InitializeComponent();
             this.account = account;
+            this.firstrun = firstrun;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -42,8 +47,31 @@ namespace Лабиринт
 
         private void button1_Click(object sender, EventArgs e)
         {
+            bool exit = false;
             string login = Convert.ToString(textBox1.Text);
             string password = Convert.ToString(textBox2.Text);
+            if (string.IsNullOrEmpty(login) || Regex.IsMatch(login, @"[^a-zA-Z\d]"))
+            {
+                label4.Visible = true;
+                exit = true;
+            }
+            else
+            {
+                label4.Visible = false;
+            }
+            if (string.IsNullOrEmpty(password) || Regex.IsMatch(password, @"[^a-zA-Z\d]"))
+            {
+                label5.Visible = true;
+                exit = true;
+            }
+            else
+            {
+                label5.Visible = false;
+            }
+            if (exit)
+            {
+                return;
+            }
             int resultcode = Authorize(login, password);
             switch (resultcode)
             {
@@ -53,15 +81,9 @@ namespace Лабиринт
                 case 2:
                     MessageBox.Show("К сожалению, пароль неверен! Пожалуйста, проверьте поле пароля.", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     break;
-                case 10:
-                    access = true;
-                    account.UpdateUserInfo(resultcode, true);
-                    account.Visible = true;
-                    this.Close();
-                    break;
                 default:
                     access = true;
-                    account.UpdateUserInfo(resultcode,false);
+                    account.UpdateUserInfo(resultcode);
                     account.Visible = true;
                     this.Close();
                     break;
@@ -74,6 +96,34 @@ namespace Лабиринт
             if (!access)
             {
                 Application.Exit();
+            }
+        }
+
+        private void login_Load(object sender, EventArgs e)
+        {
+            label5.Visible = false;
+            label4.Visible = false;
+            if (firstrun)
+            {
+                DialogResult result = MessageBox.Show("В настоящий момент аккаунт учителя не зарегистрирован. Хотите зарегистрировать его прямо сейчас?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    this.Visible = false;
+                    RegistrationForm registration = new RegistrationForm(this);
+                    registration.ShowDialog();
+                }
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                textBox2.UseSystemPasswordChar = true;
+            }
+            else
+            {
+                textBox2.UseSystemPasswordChar = false;
             }
         }
     }

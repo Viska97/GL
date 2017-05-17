@@ -91,14 +91,11 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Лабиринт 1",
-            "Лабиринт 2",
-            "Лабиринт 3"});
             this.comboBox1.Location = new System.Drawing.Point(164, 107);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(172, 21);
             this.comboBox1.TabIndex = 5;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -128,6 +125,8 @@
             this.Text = "Генератор лабиринта";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Account_FormClosed);
             this.Load += new System.EventHandler(this.Account_Load);
+            this.VisibleChanged += new System.EventHandler(this.Account_VisibleChanged);
+            this.Enter += new System.EventHandler(this.Account_Enter);
             this.ResumeLayout(false);
             this.PerformLayout();
 
