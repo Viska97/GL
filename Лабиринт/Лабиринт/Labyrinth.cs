@@ -11,7 +11,7 @@ namespace Лабиринт
 {
     public partial class Labyrinth : Form
     {
-        int style;
+        public int style;
         public string labname;
         MazeSolver m_Maze;
         Account account;
@@ -22,15 +22,16 @@ namespace Лабиринт
         int m_iColDimensions = 0; 
         int height = 0;
         int width = 0;
-        int method = 0;
+        public int method = 0;
         int startY;
         int endY, endX;
         int StudentCount = 1;
-        public readonly string Imya, Familiya, Otchestvo;
-        public int minutes, seconds;
-        int defminutes, defseconds;
+        string Imya, Familiya, Otchestvo;
+        int id;
+        int minutes, seconds;
+        public int defminutes, defseconds;
         bool NoFinish = true;
-        bool IsTeacher;
+        public bool IsTeacher;
         public bool GiveUp=false;
 
         public Labyrinth()
@@ -211,7 +212,7 @@ namespace Лабиринт
             
         }
 
-        public Labyrinth(Account account, int size ,int method ,int style, string labname, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher)
+        public Labyrinth(Account account, int size ,int method ,int style, string labname, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher, int id)
         {
             this.account = account;
             this.style = style;
@@ -229,6 +230,7 @@ namespace Лабиринт
             this.defseconds = seconds;
             this.IsTeacher = IsTeacher;
             this.labname = labname;
+            this.id = id;
             m_iSize = (int) 510/size;
             InitializeComponent();
         }
@@ -302,8 +304,7 @@ namespace Лабиринт
         {
             this.Visible = false;
             int[,] OptimalMaze = mz.Getmaze(style, true);
-            int[,] testmat = OptimalMaze;
-            results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind);
+            results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind, Familiya,Imya,Otchestvo, id, minutes, seconds);
             results.ShowDialog();
         }
 
