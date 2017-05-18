@@ -111,6 +111,12 @@
       <DependentUpon>results.cs</DependentUpon>
     </Compile>
     <Compile Include="SQLHelper.cs" />
+    <Compile Include="Stats.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Stats.Designer.cs">
+      <DependentUpon>Stats.cs</DependentUpon>
+    </Compile>
     <Compile Include="Translit.cs" />
     <EmbeddedResource Include="Account.resx">
       <DependentUpon>Account.cs</DependentUpon>
@@ -138,6 +144,9 @@
     </Compile>
     <EmbeddedResource Include="results.resx">
       <DependentUpon>results.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stats.resx">
+      <DependentUpon>Stats.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="packages.config" />

@@ -64,6 +64,11 @@ namespace Лабиринт
                     presetchanged = true;
                 }
             }
+
+            if (numericUpDown2.Value ==0 && numericUpDown3.Value<10)
+            {
+                numericUpDown3.Value = 10;
+            }
             
         }
 
@@ -232,6 +237,11 @@ namespace Лабиринт
                 {
                     presetchanged = true;
                 }
+            }
+
+            if (numericUpDown2.Value == 0 && numericUpDown3.Value < 10)
+            {
+                numericUpDown3.Value = 10;
             }
             
         }

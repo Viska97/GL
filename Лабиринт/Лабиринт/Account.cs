@@ -54,7 +54,7 @@ namespace Лабиринт
         {
             string[] parameters = GetProfileParameters(comboBox1.SelectedIndex);
             this.Visible = false;
-            Labyrinth labyrinth = new Labyrinth(this, Convert.ToInt32(parameters[3]), Convert.ToInt32(parameters[1]), Convert.ToInt32(parameters[2]), parameters[0], Convert.ToInt32(parameters[4]), Convert.ToInt32(parameters[5]), familiya, imya, otchestvo, isteacher);
+            Labyrinth labyrinth = new Labyrinth(this, Convert.ToInt32(parameters[3]), Convert.ToInt32(parameters[1]), Convert.ToInt32(parameters[2]), parameters[0], Convert.ToInt32(parameters[4]), Convert.ToInt32(parameters[5]), familiya, imya, otchestvo, isteacher, id);
             labyrinth.ShowDialog();
         }
 
@@ -71,6 +71,13 @@ namespace Лабиринт
         private void Account_VisibleChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            this.Visible = false;
+            Stats stats = new Stats(this);
+            stats.ShowDialog();
         }
 
         private void Account_Load(object sender, EventArgs e)
@@ -106,10 +113,12 @@ namespace Лабиринт
             if (isteacher)
             {
                 izmenit_parametry.Enabled = true;
+                button1.Enabled = true;
             }
             else
             {
                 izmenit_parametry.Enabled = false;
+                button1.Enabled = false;
             }
             comboBox1.SelectedIndex = 0;
         }

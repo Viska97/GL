@@ -29,7 +29,7 @@ namespace Лабиринт
                 SQLiteCommand command = new SQLiteCommand("CREATE TABLE Accounts (id INTEGER PRIMARY KEY, login TEXT, password TEXT, familiya TEXT, imya TEXT, otchestvo TEXT, isteacher BOOLEAN);", connection);
                 connection.Open();
                 command.ExecuteNonQuery();
-                command = new SQLiteCommand("CREATE TABLE Results (id INTEGER, datetime DATETIME, lname TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, optimalcount INTEGER, studentcount INTEGER, time TIME, result TEXT);", connection);
+                command = new SQLiteCommand("CREATE TABLE Results (id INTEGER, datetime DATETIME, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, lminutes INTEGER, lseconds INTEGER, optimalcount INTEGER, studentcount INTEGER, minutes INTEGER, seconds INTEGER, result TEXT);", connection);
                 command.ExecuteNonQuery();
                 command = new SQLiteCommand("CREATE TABLE Presets (presetid INTEGER, lname TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, minutes INTEGER, seconds INTEGER);", connection);
                 command.ExecuteNonQuery();
@@ -172,11 +172,21 @@ namespace Лабиринт
             connection.Close();
         }
 
+        public static void AddResult(int id, int lgentype, int lstyle, int lsize, int lminutes, int lsecondes, int optimalcount, int studentcount, int minutes, int seconds, string result)
+        {
+            connection.Open();
+            string dt = "";
+            SQLiteCommand command = new SQLiteCommand(string.Format("INSERT INTO 'Results' ('id', 'datetime', 'lgentype', 'lstyle', 'lsize', 'lminutes', 'lseconds', 'optimalcount', 'studentcount', 'minutes', 'seconds', 'result') VALUES ({0}, DATETIME('NOW'), {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, '{11}');", id, dt, lgentype, lstyle, lsize, lminutes, lsecondes, optimalcount, studentcount, minutes, seconds, result), connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
         public static void ResetDatabase()
         {
             File.Create(deleteName);
             Application.Restart();
         }
 
+        
     }
 }
