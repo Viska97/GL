@@ -55,7 +55,7 @@
             this.radioButton1.Location = new System.Drawing.Point(412, 111);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(67, 17);
-            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabIndex = 1;
             this.radioButton1.Text = "Учитель";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
@@ -66,7 +66,7 @@
             this.radioButton2.Location = new System.Drawing.Point(306, 111);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(62, 17);
-            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabIndex = 0;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Ученик";
             this.radioButton2.UseVisualStyleBackColor = true;
@@ -147,7 +147,7 @@
             this.nazad.Location = new System.Drawing.Point(38, 363);
             this.nazad.Name = "nazad";
             this.nazad.Size = new System.Drawing.Size(75, 23);
-            this.nazad.TabIndex = 10;
+            this.nazad.TabIndex = 12;
             this.nazad.Text = "Назад";
             this.nazad.UseVisualStyleBackColor = true;
             this.nazad.Click += new System.EventHandler(this.button1_Click);
@@ -177,7 +177,7 @@
             this.textBox4.Location = new System.Drawing.Point(254, 287);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(225, 20);
-            this.textBox4.TabIndex = 13;
+            this.textBox4.TabIndex = 10;
             this.textBox4.UseSystemPasswordChar = true;
             // 
             // label7

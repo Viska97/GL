@@ -126,12 +126,12 @@ namespace Лабиринт
             if (ExitFind && (StudentCount==OptimalCount))
             {
                 Result = "Лабиринт пройден! Ваш путь оптимален!";
-                StatResult = "Лабиринт пройден,путь оптимален";
+                StatResult = "Путь оптимален";
             }
             if (ExitFind && (StudentCount != OptimalCount))
             {
-                Result = "Лабиринт пройден, но ваш путь не оптимален";
-                StatResult = "Лабиринт пройден,путь не оптимален";
+                Result = "Лабиринт пройден, но ваш путь не оптимален.";
+                StatResult = "Путь не оптимален";
             }
             if (!ExitFind)
             {
@@ -143,7 +143,7 @@ namespace Лабиринт
                 else
                 {
                     Result = "Лабиринт не пройден!";
-                    StatResult = "Лабиринт не пройден(кончилось время)";
+                    StatResult = "Время закончилось";
                 }
             }
             label6.Text = Result;

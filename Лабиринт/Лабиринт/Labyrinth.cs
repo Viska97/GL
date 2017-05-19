@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static Лабиринт.SQLHelper;
 
 namespace Лабиринт
 {
@@ -33,6 +34,7 @@ namespace Лабиринт
         bool NoFinish = true;
         public bool IsTeacher;
         public bool GiveUp=false;
+        bool protect = true;
 
         public Labyrinth()
         {
@@ -61,6 +63,10 @@ namespace Лабиринт
             pictureBox1.Location = new Point((660-(m_iColDimensions * m_iSize + 3))/2, ((538-(m_iRowDimensions * m_iSize + 3))/2)+5);
             m_iMaze = m_Maze.GetMaze;
             CheckStartAndEnd();
+            if (!IsTeacher)
+            {
+                AddResult(id, method, style, m_iColDimensions, defminutes, defseconds, 0, StudentCount, minutes, seconds, "Ошибка прохождения");
+            }
             UpdateTimerText();
             timer1.Start();
         }
@@ -171,6 +177,7 @@ namespace Лабиринт
                         NoFinish = false;
                         timer1.Stop();
                         LoadResults(true);
+                        protect = false;
                         this.Close();
                     }
                     
@@ -260,19 +267,41 @@ namespace Лабиринт
                 minutes = minutes - 1;
                 seconds = 59;
             }
+            if (!IsTeacher)
+            {
+                UpdateTempResult(id, method, style, m_iColDimensions, defminutes, defseconds, 0, StudentCount, minutes, seconds, "Ошибка прохождения");
+            }
             if (minutes == 0 && seconds == 0 && NoFinish)
             {
                 timer1.Stop();
                 UpdateTimerText();
                 MessageBox.Show("Время вышло!","", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 LoadResults(false);
+                protect = false;
                 this.Close();
             }
             UpdateTimerText();
         }
 
+        private void Labyrinth_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (protect)
+            {
+                e.Cancel = true;
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
+            seconds = seconds - 1;
+            if (seconds == -1)
+            {
+                minutes = minutes - 1;
+                seconds = 59;
+            }
+            this.Visible = false;
+            UpdateTimerText();
             DialogResult result = MessageBox.Show(
                 "Лабиринт не пройден! Вы действительно хотите сдаться?",
                 "",
@@ -283,13 +312,17 @@ namespace Лабиринт
                 timer1.Stop();
                 GiveUp = true;
                 LoadResults(false);
+                protect = false;
                 this.Close();
             }
+            this.Visible = true;
+            timer1.Start();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             timer1.Stop();
+            protect = false;
             this.Close();
         }
 
@@ -304,6 +337,10 @@ namespace Лабиринт
         {
             this.Visible = false;
             int[,] OptimalMaze = mz.Getmaze(style, true);
+            if (!IsTeacher)
+            {
+                DeleteTempResult();
+            }
             results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind, Familiya,Imya,Otchestvo, id, minutes, seconds);
             results.ShowDialog();
         }
