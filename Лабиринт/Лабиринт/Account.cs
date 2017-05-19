@@ -80,6 +80,12 @@ namespace Лабиринт
             stats.ShowDialog();
         }
 
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            About about = new About();
+            about.ShowDialog();
+        }
+
         private void Account_Load(object sender, EventArgs e)
         {
             CheckDatabase();

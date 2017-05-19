@@ -118,7 +118,7 @@ namespace Лабиринт
                 MessageBoxIcon.Asterisk);
                 try
                 {
-                    ResetDatabase();
+                    ResetDatabaseTables();
                 }
                 catch (Exception)
                 {

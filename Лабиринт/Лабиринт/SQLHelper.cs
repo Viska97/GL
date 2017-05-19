@@ -29,7 +29,7 @@ namespace Лабиринт
                 SQLiteCommand command = new SQLiteCommand("CREATE TABLE Accounts (id INTEGER PRIMARY KEY, login TEXT, password TEXT, familiya TEXT, imya TEXT, otchestvo TEXT, isteacher BOOLEAN);", connection);
                 connection.Open();
                 command.ExecuteNonQuery();
-                command = new SQLiteCommand("CREATE TABLE Results (id INTEGER, datetime DATETIME, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, lminutes INTEGER, lseconds INTEGER, optimalcount INTEGER, studentcount INTEGER, minutes INTEGER, seconds INTEGER, result TEXT);", connection);
+                command = new SQLiteCommand("CREATE TABLE Results (id INTEGER, datetime TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, lminutes INTEGER, lseconds INTEGER, optimalcount INTEGER, studentcount INTEGER, minutes INTEGER, seconds INTEGER, result TEXT);", connection);
                 command.ExecuteNonQuery();
                 command = new SQLiteCommand("CREATE TABLE Presets (presetid INTEGER, lname TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, minutes INTEGER, seconds INTEGER);", connection);
                 command.ExecuteNonQuery();
@@ -47,8 +47,36 @@ namespace Лабиринт
             }
             else
             {
+                int tables = 0;
                 //connection = new SQLiteConnection(string.Format("Data Source={0};Version=3;Password={1};", databaseName, pass));
                 connection = new SQLiteConnection(string.Format("Data Source={0};", databaseName));
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", connection);
+                SQLiteDataReader reader = command.ExecuteReader();
+                foreach (DbDataRecord record in reader)
+                {
+                    tables++;
+                }
+                if (tables == 0)
+                {
+                    command = new SQLiteCommand("CREATE TABLE Accounts (id INTEGER PRIMARY KEY, login TEXT, password TEXT, familiya TEXT, imya TEXT, otchestvo TEXT, isteacher BOOLEAN);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("CREATE TABLE Results (id INTEGER, datetime TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, lminutes INTEGER, lseconds INTEGER, optimalcount INTEGER, studentcount INTEGER, minutes INTEGER, seconds INTEGER, result TEXT);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("CREATE TABLE Presets (presetid INTEGER, lname TEXT, lgentype INTEGER, lstyle INTEGER, lsize INTEGER, minutes INTEGER, seconds INTEGER);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (0, 'Лабиринт 1', 0, 0, 21, 1, 0);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (1, 'Лабиринт 2', 0, 0, 21, 1, 0);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (2, 'Лабиринт 3', 0, 0, 21, 1, 0);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (3, 'Лабиринт 4', 0, 0, 21, 1, 0);", connection);
+                    command.ExecuteNonQuery();
+                    command = new SQLiteCommand("INSERT INTO 'Presets' ('presetid', 'lname', 'lgentype', 'lstyle', 'lsize', 'minutes', 'seconds') VALUES (4, 'Лабиринт 5', 0, 0, 21, 1, 0);", connection);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
             }
         }
 
@@ -175,18 +203,159 @@ namespace Лабиринт
         public static void AddResult(int id, int lgentype, int lstyle, int lsize, int lminutes, int lsecondes, int optimalcount, int studentcount, int minutes, int seconds, string result)
         {
             connection.Open();
-            string dt = "";
-            SQLiteCommand command = new SQLiteCommand(string.Format("INSERT INTO 'Results' ('id', 'datetime', 'lgentype', 'lstyle', 'lsize', 'lminutes', 'lseconds', 'optimalcount', 'studentcount', 'minutes', 'seconds', 'result') VALUES ({0}, DATETIME('NOW'), {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, '{11}');", id, dt, lgentype, lstyle, lsize, lminutes, lsecondes, optimalcount, studentcount, minutes, seconds, result), connection);
+            string dt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            SQLiteCommand command = new SQLiteCommand(string.Format("INSERT INTO 'Results' ('id', 'datetime', 'lgentype', 'lstyle', 'lsize', 'lminutes', 'lseconds', 'optimalcount', 'studentcount', 'minutes', 'seconds', 'result') VALUES ({0}, '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, '{11}');", id, dt, lgentype, lstyle, lsize, lminutes, lsecondes, optimalcount, studentcount, minutes, seconds, result), connection);
             command.ExecuteNonQuery();
             connection.Close();
         }
 
-        public static void ResetDatabase()
+        public static List<ListViewItem> GetResults(int id)
         {
-            File.Create(deleteName);
+            List<ListViewItem> results = new List<ListViewItem>();
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(string.Format("SELECT * FROM Results WHERE id='{0}' ORDER BY datetime DESC", id), connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                ListViewItem lvi = new ListViewItem(record["datetime"].ToString());
+                switch (Convert.ToInt32(record["lgentype"].ToString()))
+                {
+                    case 0:
+                        lvi.SubItems.Add("Поиск в глубину");
+                        break;
+                    case 1:
+                        lvi.SubItems.Add("Рекурсивный откат");
+                        break;
+                    
+                }
+                switch (Convert.ToInt32(record["lstyle"].ToString()))
+                {
+                    case 0:
+                        lvi.SubItems.Add("Классический");
+                        break;
+                    case 1:
+                        lvi.SubItems.Add("Гибридный 1");
+                        break;
+                    case 2:
+                        lvi.SubItems.Add("Гибридный 2");
+                        break;
+                }
+                int lsize = Convert.ToInt32(record["lsize"].ToString());
+                string lminutes = record["lminutes"].ToString();
+                if (Convert.ToInt32(lminutes) <10)
+                {
+                    lminutes = "0" + lminutes;
+                }
+                string lseconds = record["lseconds"].ToString();
+                if (Convert.ToInt32(lseconds) < 10)
+                {
+                    lseconds = "0" + lseconds;
+                }
+                string optimalcount = record["optimalcount"].ToString() + " кл";
+                string studentcount = record["studentcount"].ToString() + " кл";
+                int minutes = Convert.ToInt32(record["minutes"].ToString());
+                int seconds = Convert.ToInt32(record["seconds"].ToString());
+                int totalminutes = Convert.ToInt32(lminutes) - minutes;
+                int totalseconds = Convert.ToInt32(lseconds) - seconds;
+                if (totalseconds < 0)
+                {
+                    totalseconds =  60 + totalseconds;
+                    totalminutes=totalminutes-1;
+                }
+                string tminutes = Convert.ToString(totalminutes);
+                string tseconds = Convert.ToString(totalseconds);
+                if (totalminutes < 10)
+                {
+                    tminutes = "0" + tminutes;
+                }
+                if (totalseconds < 10)
+                {
+                    tseconds = "0" + tseconds;
+                }
+                lvi.SubItems.Add(string.Format("{0}x{0}",lsize));
+                lvi.SubItems.Add(string.Format("{0}:{1}", lminutes, lseconds));
+                lvi.SubItems.Add(optimalcount);
+                lvi.SubItems.Add(studentcount);
+                lvi.SubItems.Add(string.Format("{0}:{1}", tminutes, tseconds));
+                lvi.SubItems.Add(record["result"].ToString());
+                results.Add(lvi);
+            }
+            connection.Close();
+            return results;
+        }
+
+        public static List<Student> GetAccounts()
+        {
+            List<Student> students = new List<Student>();
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM Accounts WHERE isteacher=0 ORDER BY id", connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                string familiya = record["familiya"].ToString();
+                string imya = record["imya"].ToString();
+                string otchestvo = record["otchestvo"].ToString();
+                string fio = string.Format("{0} {1} {2}", familiya, imya, otchestvo);
+                Student student = new Student(Convert.ToInt32(record["id"].ToString()), fio);
+                students.Add(student);
+            }
+            connection.Close();
+            return students;
+        }
+
+        public static void DeleteResults(int id)
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand(string.Format("DELETE FROM Results WHERE id='{0}'", id), connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public static void UpdateTempResult(int id, int lgentype, int lstyle, int lsize, int lminutes, int lsecondes, int optimalcount, int studentcount, int minutes, int seconds, string result)
+        {
+            string datetime="";
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM Results ORDER BY datetime DESC LIMIT 1", connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                datetime = record["datetime"].ToString();
+            }
+            string dt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            command = new SQLiteCommand(string.Format("UPDATE Results SET 'id' = {0}, 'datetime' = '{1}', 'lgentype' = {2}, 'lstyle' = {3}, 'lsize' = {4}, 'lminutes' = {5}, 'lseconds' = {6}, 'optimalcount' = {7}, 'studentcount' = {8}, 'minutes' = {9}, 'seconds' = {10}, 'result' = '{11}' WHERE datetime='{12}'", id, dt, lgentype, lstyle, lsize, lminutes, lsecondes, optimalcount, studentcount, minutes, seconds, result,datetime), connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public static void DeleteTempResult()
+        {
+            string datetime = "";
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM Results ORDER BY datetime DESC LIMIT 1", connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                datetime = record["datetime"].ToString();
+            }
+            string test = datetime;
+            command = new SQLiteCommand(string.Format("DELETE FROM Results WHERE datetime='{0}'",datetime), connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public static void ResetDatabaseTables()
+        {
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand("DROP Table Accounts", connection);
+            command.ExecuteNonQuery();
+            command = new SQLiteCommand("DROP Table 'Results'", connection);
+            command.ExecuteNonQuery();
+            command = new SQLiteCommand("DROP Table 'Presets'", connection);
+            command.ExecuteNonQuery();
+            connection.Close();
             Application.Restart();
         }
 
-        
+
     }
 }
