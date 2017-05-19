@@ -126,5 +126,10 @@ namespace Лабиринт
                 textBox2.UseSystemPasswordChar = false;
             }
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            MessageBox.Show("Для восстановления пароля отправьте письмо на email: gl-support@yandex.ru с темой 'я забыл пароль'. Мы обязательно свяжемся с вами!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }
