@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static Лабиринт.SQLHelper;
+using Лабиринт;
 
 namespace Лабиринт
 {
@@ -151,7 +151,7 @@ namespace Лабиринт
             UpdateTimerText();
             if (!labyrinth.IsTeacher)
             {
-                AddResult(id, labyrinth.method, labyrinth.style, m_iRowDimensions, labyrinth.defminutes, labyrinth.defseconds, OptimalCount, StudentCount, minutes, seconds, StatResult);
+                SQLHelper.AddResult(id, labyrinth.method, labyrinth.style, m_iRowDimensions, labyrinth.defminutes, labyrinth.defseconds, OptimalCount, StudentCount, minutes, seconds, StatResult);
             }
             
         }

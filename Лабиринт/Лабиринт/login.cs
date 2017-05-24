@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Data.Common;
 using System.Data.SQLite;
-using static Лабиринт.SQLHelper;
+using Лабиринт;
 using System.Text.RegularExpressions;
 
 namespace Лабиринт
@@ -72,7 +72,7 @@ namespace Лабиринт
             {
                 return;
             }
-            int resultcode = Authorize(login, password);
+            int resultcode = SQLHelper.Authorize(login, password);
             switch (resultcode)
             {
                 case 1:
@@ -129,7 +129,16 @@ namespace Лабиринт
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            MessageBox.Show("Для восстановления пароля отправьте письмо на email: gl-support@yandex.ru с темой 'я забыл пароль'. Мы обязательно свяжемся с вами!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            this.Visible = false;
+            RestorePassword rp = new RestorePassword(this);
+            rp.ShowDialog();
+            //MessageBox.Show("Для восстановления пароля отправьте письмо на email: gl-support@yandex.ru с темой 'я забыл пароль'. Мы обязательно свяжемся с вами!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void login_FormClosing(object sender, FormClosingEventArgs e)
+        {
+        
         }
     }
 }

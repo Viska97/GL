@@ -9,11 +9,15 @@ namespace Лабиринт
     {
         public int id;
         public string fio;
+        public string login;
+        public string password;
 
-        public Student(int id, string fio)
+        public Student(int id, string fio, string login, string password)
         {
             this.id = id;
             this.fio = fio;
+            this.login = login;
+            this.password = password;
         }
     }
 }

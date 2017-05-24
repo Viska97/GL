@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.Common;
-using static Лабиринт.SQLHelper;
+using Лабиринт;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Лабиринт
 {
@@ -36,7 +37,7 @@ namespace Лабиринт
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            if (CheckTeacherRegistration())
+            if (SQLHelper.CheckTeacherRegistration())
             {
                 radioButton1.Enabled = false;
             }
@@ -112,7 +113,7 @@ namespace Лабиринт
                 { isteacher = 1; }
             try
             {
-                login = AddAccount(loginfamiliya, password, familiya, imya, otchestvo, isteacher);
+                login = SQLHelper.AddAccount(loginfamiliya, password, familiya, imya, otchestvo, isteacher);
                 check = true;
             }
             catch (Exception)
