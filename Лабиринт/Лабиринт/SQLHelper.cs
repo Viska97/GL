@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace Лабиринт
 {
-    public static class SQLHelper
+    static class SQLHelper
     {
         static string databaseName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "gl.db");
         static string deleteName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "deleteme.txt");
@@ -296,7 +296,7 @@ namespace Лабиринт
                 string imya = record["imya"].ToString();
                 string otchestvo = record["otchestvo"].ToString();
                 string fio = string.Format("{0} {1} {2}", familiya, imya, otchestvo);
-                Student student = new Student(Convert.ToInt32(record["id"].ToString()), fio);
+                Student student = new Student(Convert.ToInt32(record["id"].ToString()), fio, Convert.ToString(record["login"].ToString()), Convert.ToString(record["password"].ToString()));
                 students.Add(student);
             }
             connection.Close();
@@ -341,6 +341,25 @@ namespace Лабиринт
             command = new SQLiteCommand(string.Format("DELETE FROM Results WHERE datetime='{0}'",datetime), connection);
             command.ExecuteNonQuery();
             connection.Close();
+        }
+
+        public static Teacher GetTecherData()
+        {
+            Teacher teacher = new Teacher();
+            connection.Open();
+            SQLiteCommand command = new SQLiteCommand("SELECT * FROM Accounts WHERE isteacher=1 LIMIT 1", connection);
+            reader = command.ExecuteReader();
+            foreach (DbDataRecord record in reader)
+            {
+                teacher.familiya = record["familiya"].ToString();
+                teacher.imya = record["imya"].ToString();
+                teacher.otchestvo = record["otchestvo"].ToString();
+                teacher.login = record["login"].ToString();
+                teacher.password = record["password"].ToString();
+            }
+            connection.Close();
+            return teacher;
+ 
         }
 
         public static void ResetDatabaseTables()

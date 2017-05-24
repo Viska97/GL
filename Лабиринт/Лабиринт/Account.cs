@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static Лабиринт.SQLHelper;
+using Лабиринт;
 
 namespace Лабиринт
 {
@@ -44,7 +44,7 @@ namespace Лабиринт
         private void button1_Click(object sender, EventArgs e)
         {
             this.Visible = false;
-            bool firstrun = CheckTeacherRegistration();
+            bool firstrun = SQLHelper.CheckTeacherRegistration();
             login login = new login(this, !firstrun);
             login.ShowDialog();
             this.Refresh();
@@ -52,7 +52,7 @@ namespace Лабиринт
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string[] parameters = GetProfileParameters(comboBox1.SelectedIndex);
+            string[] parameters = SQLHelper.GetProfileParameters(comboBox1.SelectedIndex);
             this.Visible = false;
             Labyrinth labyrinth = new Labyrinth(this, Convert.ToInt32(parameters[3]), Convert.ToInt32(parameters[1]), Convert.ToInt32(parameters[2]), parameters[0], Convert.ToInt32(parameters[4]), Convert.ToInt32(parameters[5]), familiya, imya, otchestvo, isteacher, id);
             labyrinth.ShowDialog();
@@ -88,13 +88,13 @@ namespace Лабиринт
 
         private void Account_Load(object sender, EventArgs e)
         {
-            CheckDatabase();
-            List<string> presetsnames = GetProfilesNames();
+            SQLHelper.CheckDatabase();
+            List<string> presetsnames = SQLHelper.GetProfilesNames();
             foreach (string presetname in presetsnames)
             {
                 comboBox1.Items.Add(presetname);
             }
-            bool firstrun = CheckTeacherRegistration();
+            bool firstrun = SQLHelper.CheckTeacherRegistration();
             this.Visible = false;
             login login = new login(this, !firstrun);
             login.ShowDialog();
@@ -103,7 +103,7 @@ namespace Лабиринт
         public void UpdateUserInfo(int id)
         {
             this.id = id;
-            string[] credentials = GetCredentials(id);
+            string[] credentials = SQLHelper.GetCredentials(id);
             familiya = credentials[0];
             imya = credentials[1];
             otchestvo = credentials[2];

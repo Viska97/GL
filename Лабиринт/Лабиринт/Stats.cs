@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static Лабиринт.SQLHelper;
+using Лабиринт;
 
 namespace Лабиринт
 {
@@ -35,18 +35,24 @@ namespace Лабиринт
 
         private void Stats_Load(object sender, EventArgs e)
         {
-            students = GetAccounts();
+            students = SQLHelper.GetAccounts();
             foreach (Student student in students)
             {
                 comboBox1.Items.Add(student.fio);
             }
+            label2.Visible = false;
+            label3.Visible = false;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             button2.Enabled = true;
+            label2.Visible = true;
+            label3.Visible = true;
+            label2.Text = "Логин: " + students[comboBox1.SelectedIndex].login;
+            label3.Text = "Пароль: " + students[comboBox1.SelectedIndex].password;
             listView1.Items.Clear();
-            results = GetResults(students[comboBox1.SelectedIndex].id);
+            results = SQLHelper.GetResults(students[comboBox1.SelectedIndex].id);
             foreach (ListViewItem lvi in results)
             {
                 listView1.Items.Add(lvi);
@@ -64,7 +70,7 @@ namespace Лабиринт
                 MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
                 {
-                    DeleteResults(students[comboBox1.SelectedIndex].id);
+                    SQLHelper.DeleteResults(students[comboBox1.SelectedIndex].id);
                     listView1.Items.Clear();
                     MessageBox.Show(
                     "Результаты успешно удалены.",

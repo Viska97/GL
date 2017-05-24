@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static Лабиринт.SQLHelper;
+using Лабиринт;
 
 namespace Лабиринт
 {
@@ -42,7 +42,7 @@ namespace Лабиринт
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SetProfileParameters(currentpreset, Convert.ToString(comboBox2.SelectedIndex), Convert.ToString(comboBox3.SelectedIndex), Convert.ToString(numericUpDown1.Value), Convert.ToString(numericUpDown2.Value), Convert.ToString(numericUpDown3.Value));
+            SQLHelper.SetProfileParameters(currentpreset, Convert.ToString(comboBox2.SelectedIndex), Convert.ToString(comboBox3.SelectedIndex), Convert.ToString(numericUpDown1.Value), Convert.ToString(numericUpDown2.Value), Convert.ToString(numericUpDown3.Value));
             presetchanged = false;
             MessageBox.Show(
                 "Профиль был успешно сохранен!",
@@ -94,7 +94,7 @@ namespace Лабиринт
             comboBox2.SelectedIndex = 0;
             comboBox3.SelectedIndex = 0;
             groupBox1.Enabled = false;
-            List<string> presetsnames = GetProfilesNames();
+            List<string> presetsnames = SQLHelper.GetProfilesNames();
             foreach (string presetname in presetsnames)
             {
                 comboBox1.Items.Add(presetname);
@@ -118,7 +118,7 @@ namespace Лабиринт
                 MessageBoxIcon.Asterisk);
                 try
                 {
-                    ResetDatabaseTables();
+                    SQLHelper.ResetDatabaseTables();
                 }
                 catch (Exception)
                 {
@@ -183,7 +183,7 @@ namespace Лабиринт
                 groupBox1.Enabled = true;
                 button1.Enabled = true;
                 currentpreset = comboBox1.SelectedIndex;
-                parameters = GetProfileParameters(comboBox1.SelectedIndex);
+                parameters = SQLHelper.GetProfileParameters(comboBox1.SelectedIndex);
                 numericUpDown1.Value = Convert.ToInt32(parameters[3]);
                 comboBox2.SelectedIndex = Convert.ToInt32(parameters[1]);
                 comboBox3.SelectedIndex = Convert.ToInt32(parameters[2]);
