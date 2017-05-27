@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Лабиринт;
 
 namespace Лабиринт
 {
@@ -24,13 +25,17 @@ namespace Лабиринт
         int OptimalCount = 0, StudentCount;
         bool ExitFind;
         string Result;
+        string StatResult;
+        string Familiya, Imya, Otchestvo;
+        int id;
+        int minutes, seconds;
 
         public results()
         {
             InitializeComponent();
         }
 
-        public results(Labyrinth labyrinth, int[,] StudentMaze, int[,] OptimalMaze, int iY, int iX, int iSelectedY, int m_iRowDimensions, int m_iColDimensions, int m_iSize, int StudentCount, bool ExitFind)
+        public results(Labyrinth labyrinth, int[,] StudentMaze, int[,] OptimalMaze, int iY, int iX, int iSelectedY, int m_iRowDimensions, int m_iColDimensions, int m_iSize, int StudentCount, bool ExitFind, string Familiya, string Imya, string Otchestvo, int id, int minutes, int seconds)
         {
             this.labyrinth = labyrinth;
             this.StudentMaze = StudentMaze;
@@ -43,6 +48,12 @@ namespace Лабиринт
             this.iSelectedY = iSelectedY;
             this.StudentCount = StudentCount;
             this.ExitFind = ExitFind;
+            this.Imya = Imya;
+            this.Familiya = Familiya;
+            this.Otchestvo = Otchestvo;
+            this.minutes = minutes;
+            this.seconds = seconds;
+            this.id = id;
             InitializeComponent();
         }
 
@@ -115,18 +126,34 @@ namespace Лабиринт
             if (ExitFind && (StudentCount==OptimalCount))
             {
                 Result = "Лабиринт пройден! Ваш путь оптимален!";
+                StatResult = "Путь оптимален";
             }
             if (ExitFind && (StudentCount != OptimalCount))
             {
-                Result = "Лабиринт пройден, но ваш путь не оптимален";
+                Result = "Лабиринт пройден, но ваш путь не оптимален.";
+                StatResult = "Путь не оптимален";
             }
             if (!ExitFind)
             {
-                Result = "Лабиринт не пройден!";
+                if (labyrinth.GiveUp == true)
+                {
+                    Result = "Вы сдались.";
+                    StatResult = "Ученик сдался";
+                }
+                else
+                {
+                    Result = "Лабиринт не пройден!";
+                    StatResult = "Время закончилось";
+                }
             }
             label6.Text = Result;
-            label2.Text = labyrinth.Familiya + " " + labyrinth.Imya + " " + labyrinth.Otchestvo;
+            label2.Text = Familiya + " " + Imya + " " + Otchestvo;
             UpdateTimerText();
+            if (!labyrinth.IsTeacher)
+            {
+                SQLHelper.AddResult(id, labyrinth.method, labyrinth.style, m_iRowDimensions, labyrinth.defminutes, labyrinth.defseconds, OptimalCount, StudentCount, minutes, seconds, StatResult);
+            }
+            
         }
 
         private void pictureBox2_Paint(object sender, PaintEventArgs e)
@@ -149,21 +176,21 @@ namespace Лабиринт
         private void UpdateTimerText()
         {
             string min, sec;
-            if (labyrinth.seconds < 10)
+            if (seconds < 10)
             {
-                sec = "0" + Convert.ToString(labyrinth.seconds);
+                sec = "0" + Convert.ToString(seconds);
             }
             else
             {
-                sec = Convert.ToString(labyrinth.seconds);
+                sec = Convert.ToString(seconds);
             }
-            if (labyrinth.minutes < 10)
+            if (minutes < 10)
             {
-                min = "0" + Convert.ToString(labyrinth.minutes);
+                min = "0" + Convert.ToString(minutes);
             }
             else
             {
-                min = Convert.ToString(labyrinth.minutes);
+                min = Convert.ToString(minutes);
             }
             label3.Text = "Осталось времени: " + min + ":" + sec;
         }
