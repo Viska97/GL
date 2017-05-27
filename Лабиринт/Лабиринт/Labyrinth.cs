@@ -6,12 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Лабиринт;
 
 namespace Лабиринт
 {
     public partial class Labyrinth : Form
     {
-        int style;
+        public int style;
         public string labname;
         MazeSolver m_Maze;
         Account account;
@@ -22,16 +23,18 @@ namespace Лабиринт
         int m_iColDimensions = 0; 
         int height = 0;
         int width = 0;
-        int method = 0;
+        public int method = 0;
         int startY;
         int endY, endX;
         int StudentCount = 1;
-        public readonly string Imya, Familiya, Otchestvo;
-        public int minutes, seconds;
-        int defminutes, defseconds;
+        string Imya, Familiya, Otchestvo;
+        int id;
+        int minutes, seconds;
+        public int defminutes, defseconds;
         bool NoFinish = true;
-        bool IsTeacher;
+        public bool IsTeacher;
         public bool GiveUp=false;
+        bool protect = true;
 
         public Labyrinth()
         {
@@ -60,6 +63,10 @@ namespace Лабиринт
             pictureBox1.Location = new Point((660-(m_iColDimensions * m_iSize + 3))/2, ((538-(m_iRowDimensions * m_iSize + 3))/2)+5);
             m_iMaze = m_Maze.GetMaze;
             CheckStartAndEnd();
+            if (!IsTeacher)
+            {
+                SQLHelper.AddResult(id, method, style, m_iColDimensions, defminutes, defseconds, 0, StudentCount, minutes, seconds, "Ошибка прохождения");
+            }
             UpdateTimerText();
             timer1.Start();
         }
@@ -170,6 +177,7 @@ namespace Лабиринт
                         NoFinish = false;
                         timer1.Stop();
                         LoadResults(true);
+                        protect = false;
                         this.Close();
                     }
                     
@@ -211,7 +219,7 @@ namespace Лабиринт
             
         }
 
-        public Labyrinth(Account account, int size ,int method ,int style, string labname, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher)
+        public Labyrinth(Account account, int size ,int method ,int style, string labname, int minutes, int seconds, string Familiya, string Imya, string Otchestvo, bool IsTeacher, int id)
         {
             this.account = account;
             this.style = style;
@@ -229,6 +237,7 @@ namespace Лабиринт
             this.defseconds = seconds;
             this.IsTeacher = IsTeacher;
             this.labname = labname;
+            this.id = id;
             m_iSize = (int) 510/size;
             InitializeComponent();
         }
@@ -258,19 +267,44 @@ namespace Лабиринт
                 minutes = minutes - 1;
                 seconds = 59;
             }
+            if (!IsTeacher)
+            {
+                SQLHelper.UpdateTempResult(id, method, style, m_iColDimensions, defminutes, defseconds, 0, StudentCount, minutes, seconds, "Ошибка прохождения");
+            }
             if (minutes == 0 && seconds == 0 && NoFinish)
             {
                 timer1.Stop();
                 UpdateTimerText();
                 MessageBox.Show("Время вышло!","", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 LoadResults(false);
+                protect = false;
                 this.Close();
             }
             UpdateTimerText();
         }
 
+        private void Labyrinth_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (protect)
+            {
+                e.Cancel = true;
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
+            seconds = seconds - 1;
+            if (seconds == -1)
+            {
+                minutes = minutes - 1;
+                seconds = 59;
+            }
+            UpdateTimerText();
+            if (!IsTeacher)
+            {
+                SQLHelper.UpdateTempResult(id, method, style, m_iColDimensions, defminutes, defseconds, 0, StudentCount, minutes, seconds, "Ошибка прохождения");
+            }
             DialogResult result = MessageBox.Show(
                 "Лабиринт не пройден! Вы действительно хотите сдаться?",
                 "",
@@ -278,15 +312,24 @@ namespace Лабиринт
                 MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
             {
+                
                 timer1.Stop();
                 GiveUp = true;
                 LoadResults(false);
+                protect = false;
                 this.Close();
             }
+            if (result == DialogResult.No)
+            {
+                timer1.Start();
+            }
+            
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            timer1.Stop();
+            protect = false;
             this.Close();
         }
 
@@ -301,8 +344,11 @@ namespace Лабиринт
         {
             this.Visible = false;
             int[,] OptimalMaze = mz.Getmaze(style, true);
-            int[,] testmat = OptimalMaze;
-            results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind);
+            if (!IsTeacher)
+            {
+                SQLHelper.DeleteTempResult();
+            }
+            results results = new results(this, m_iMaze, OptimalMaze, endY, endX, startY, m_iRowDimensions, m_iColDimensions, m_iSize, StudentCount, ExitFind, Familiya,Imya,Otchestvo, id, minutes, seconds);
             results.ShowDialog();
         }
 
